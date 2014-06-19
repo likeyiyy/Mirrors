@@ -9,7 +9,7 @@
 
 int main(int argc, char ** argv)
 {
-    memory_t * m = init_memory(1);
+    memory_t * m = get_memory();
     for(int i = 0; i * 4< m->size; ++i)
     {
         write_memory_32(m,i*4,i%256);

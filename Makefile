@@ -6,7 +6,7 @@ LDFLAGS = -lpthread
 
 .PHONY: all clean
 
-OBJS = memory.o cpucore.o keyboard.o
+OBJS = memory.o cpucore.o keyboard.o screen.o
 
 EXECS = memory_test test_key
 

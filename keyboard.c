@@ -7,9 +7,6 @@
 
 #include "includes.h"
 
-extern cpucore_t * cpu;
-extern memory_t  * memory;
-keyboard_t * keyboard;
 static int kbhit(void)
 {
     struct termios oldt, newt;
@@ -28,7 +25,6 @@ static int kbhit(void)
     {
         ungetc(ch, stdin);
         return 1;
-
     }
     return 0;
 }
@@ -39,15 +35,28 @@ static int kbhit(void)
 keyboard_t * init_keyboard(void)
 {
     keyboard_t * key = malloc(sizeof(keyboard_t));
-    key->cpu    = cpu;
-    key->memory = memory;
+    key->cpu    = get_cpu();
+    key->memory = get_memory();
     key->buffer_size = BUFFER_SIZE + 8;
     key->mmio_start  =  KEY_MMIO_ADDR;
     key->mmap_start  =  KEY_MMAP_ADDR;
     key->write_pos_reg = 0;
     key->read_pos_reg  = 0;
 
-    keyboard = key;
+    return key;
+}
+
+keyboard_t * get_keyboard(void)
+{
+    static keyboard_t * key = NULL;
+
+    if(key != NULL)
+    {
+        return key;
+    }
+
+    key = init_keyboard();
+
     return key;
 }
 /*

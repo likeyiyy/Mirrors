@@ -20,12 +20,11 @@ typedef struct _keyboard
     pthread_t id;
 }keyboard_t;
 
-extern keyboard_t * keyboard;
 /*
 * Init keyboard
 * 1.映射IO
 * */
-keyboard_t * init_keyboard(void);
+keyboard_t * get_keyboard(void);
 /*
 * Loop 
 * 1.read some thing

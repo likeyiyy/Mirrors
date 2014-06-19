@@ -7,20 +7,20 @@
 
 #include "includes.h"
 
-extern cpucore_t * cpu;
-extern memory_t  * memory;
-extern keyboard_t * keyboard;
 
 int main(int argc,char ** argv)
 {
     pthread_t wid,rid;
+    pthread_t screenid;
 
-    init_memory(16);
-    init_cpu();
-    init_keyboard();
+    memory_t * memory = get_memory();
+    cpucore_t * cpu = get_cpu();
+    keyboard_t * keyboard = get_keyboard();
+    screen_t   * screen = get_screen();
 
     pthread_create(&rid,NULL,cpu_main_loop,cpu);
     pthread_create(&wid,NULL,keyboard_loop,keyboard);
+    pthread_create(&screenid,NULL,screen_main_loop,screen);
 
     while(1)
     {

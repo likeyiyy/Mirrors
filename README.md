@@ -5,3 +5,5 @@
 添加了内存的操作
 
 +keyboard cpu
+
++ screen

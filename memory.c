@@ -7,7 +7,6 @@
 
 #include "includes.h"
 
-memory_t * memory;
 /*
  * littel duan
  * size is MB uint
@@ -21,8 +20,21 @@ memory_t * init_memory(uint32_t size)
 
     m->memory = malloc(m->size);
     exit_if_ptr_is_null(m->memory,"Error: when alloc memory_t memory");
+    memset(m->memory,0,m->size);
     
-    memory = m;
+    return m;
+}
+memory_t * get_memory(void)
+{
+    static memory_t * m = NULL;
+
+    if(m != NULL)
+    {
+        return m;
+    }
+
+    m = init_memory(MEMORY_SIZE);
+
     return m;
 }
 #define EXIT_IF_ADDR_BIGGER(addr,size) do \

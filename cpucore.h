@@ -16,9 +16,9 @@ typedef struct _cpucore
     memory_t * memory;
 }cpucore_t;
 
-extern cpucore_t * cpu;
 
-cpucore_t * init_cpu();
+
+cpucore_t * get_cpu();
 
 void * cpu_main_loop(void * arg);
 

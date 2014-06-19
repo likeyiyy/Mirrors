@@ -7,8 +7,6 @@
 
 #include "includes.h"
 
-extern memory_t * memory;
-cpucore_t * cpu;
 cpucore_t * init_cpu()
 {
     cpucore_t * tcpu = malloc(sizeof(cpucore_t));
@@ -16,10 +14,22 @@ cpucore_t * init_cpu()
     tcpu->data_register    = 0;
     tcpu->interrupt_flag   = 0;
     tcpu->interrupt_vector = 0;
-    tcpu->memory           = memory;
+    tcpu->memory           = get_memory();
     exit_if_ptr_is_null(tcpu,"Init alloc CPU error\n");
-    cpu = tcpu;
     return tcpu;
+}
+cpucore_t * get_cpu()
+{
+    static cpucore_t * cpu = NULL;
+
+    if(cpu != NULL)
+    {
+        return cpu;
+    }
+    cpu = init_cpu();
+
+    return cpu;
+
 }
 
 static inline uint8_t read_keyboard(cpucore_t * tcpu)
@@ -36,22 +46,39 @@ static inline uint8_t read_keyboard(cpucore_t * tcpu)
     write_memory_32(tcpu->memory,KEY_MMIO_ADDR+4,read_pos);
     return c;
 }
+void wait_screen_free(cpucore_t * tcpu)
+{
+    while(1)
+    {
+        uint32_t sm_flag; 
+        read_memory_32(tcpu->memory,SCREEN_MMIO_ADDR,&sm_flag);
+        if(sm_flag == 0)
+        {
+            break;
+        }
+    }
+}
 void * cpu_main_loop(void * arg)
 {
     cpucore_t * tcpu = (cpucore_t *)arg;
 
     uint8_t c;
+    int i = 0;
     while(1)
     {
         if(1 == tcpu->interrupt_flag)
         {
             tcpu->interrupt_flag = 0;
             c = read_keyboard(tcpu);
-            printf("---%c  -----\n",c);
+
+            wait_screen_free(tcpu);
+            write_memory_8(tcpu->memory,SCREEN_MMAP_ADDR+i,c);
+            i++;
+            write_memory_32(tcpu->memory,SCREEN_MMIO_ADDR,1);
         }
         else
         {
-            usleep(1000*2);
+            usleep(10*2);
         }
     }
 
