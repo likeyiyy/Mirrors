@@ -1,0 +1,35 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+CC	Makefile	/^CC = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -std=gnu99 -g$/;"	m
+CPUCORE_H	cpucore.h	8;"	d
+EXECS	Makefile	/^EXECS = memory_test$/;"	m
+EXIT_IF_ADDR_BIGGER	memory.c	26;"	d	file:
+LDFLAGS	Makefile	/^LDFLAGS = $/;"	m
+L_INCLUDES_H	includes.h	9;"	d
+L_MEMORY_H	memory.h	9;"	d
+MB_SIZE	memory.h	11;"	d
+OBJS	Makefile	/^OBJS = memory.o$/;"	m
+_cpucore	cpucore.h	/^typedef struct _cpucore$/;"	s
+_memory	memory.h	/^typedef struct _memory$/;"	s
+address_register	cpucore.h	/^    uint32_t address_register;$/;"	m	struct:_cpucore
+cpucore_t	cpucore.h	/^}cpucore_t;$/;"	t	typeref:struct:_cpucore
+data_register	cpucore.h	/^    uint32_t data_register;$/;"	m	struct:_cpucore
+exit_if_ptr_is_null	includes.h	/^static inline void exit_if_ptr_is_null(void * ptr,char * str)$/;"	f
+init_memory	memory.c	/^memory_t * init_memory(uint32_t size)$/;"	f
+interrupt_flag	cpucore.h	/^    int      interrupt_flag;$/;"	m	struct:_cpucore
+interrupt_vector	cpucore.h	/^    uint32_t interrupt_vector;$/;"	m	struct:_cpucore
+main	memory_test.c	/^int main(int argc, char ** argv)$/;"	f
+memory	memory.h	/^    uint8_t * memory;$/;"	m	struct:_memory
+memory_t	memory.h	/^}memory_t;$/;"	t	typeref:struct:_memory
+read_memory_16	memory.c	/^void read_memory_16(memory_t * m, uint32_t addr,uint16_t * value)$/;"	f
+read_memory_32	memory.c	/^void read_memory_32(memory_t * m, uint32_t addr,uint32_t  * value)$/;"	f
+read_memory_8	memory.c	/^void read_memory_8(memory_t * m,uint32_t addr,uint8_t * value)$/;"	f
+size	memory.h	/^    uint32_t size;$/;"	m	struct:_memory
+write_memory_16	memory.c	/^void write_memory_16(memory_t * m, uint32_t addr,uint16_t  value)$/;"	f
+write_memory_32	memory.c	/^void write_memory_32(memory_t * m, uint32_t addr,uint32_t  value)$/;"	f
+write_memory_8	memory.c	/^void write_memory_8(memory_t * m, uint32_t addr,uint8_t  value)$/;"	f
