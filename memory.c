@@ -7,6 +7,7 @@
 
 #include "includes.h"
 
+memory_t * memory;
 /*
  * littel duan
  * size is MB uint
@@ -21,13 +22,14 @@ memory_t * init_memory(uint32_t size)
     m->memory = malloc(m->size);
     exit_if_ptr_is_null(m->memory,"Error: when alloc memory_t memory");
     
+    memory = m;
     return m;
 }
 #define EXIT_IF_ADDR_BIGGER(addr,size) do \
 {\
     if(addr > size)\
     {\
-        printf("Error: read addr is BIGGER than memory size\n");\
+        printf("Error: read addr is BIGGER than memory size %u > %u\n",addr,size);\
         exit(-1);\
     }\
 }while(0)

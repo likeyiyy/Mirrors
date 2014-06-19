@@ -8,13 +8,14 @@
 #ifndef L_MEMORY_H
 #define L_MEMORY_H
 
-#define MB_SIZE 1024*1
+#define MB_SIZE 1024*1024
 typedef struct _memory
 {
     uint8_t * memory;
     uint32_t size;
 }memory_t;
 
+extern memory_t * memory;
 memory_t * init_memory(uint32_t size);
 
 void write_memory_8(memory_t * m,uint32_t addr,uint8_t value);

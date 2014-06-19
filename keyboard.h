@@ -8,27 +8,28 @@
 #ifndef L_KEYBOARD_H
 #define L_KEYBOARD_H
 
-#define BUFFER_SIZE 4096
 typedef struct _keyboard
 {
     cpucore_t * cpu;
     memory_t  * memory;
     uint32_t  buffer_size;
     uint32_t  mmio_start;
-    uint32_t  flag_reg;
-    uint32_t  head_reg;
-    uint32_t  tail_reg;
+    uint32_t  mmap_start;
+    uint32_t  write_pos_reg;
+    uint32_t  read_pos_reg;
     pthread_t id;
 }keyboard_t;
 
+extern keyboard_t * keyboard;
 /*
 * Init keyboard
 * 1.映射IO
 * */
-
+keyboard_t * init_keyboard(void);
 /*
 * Loop 
 * 1.read some thing
 * 2.write to buffer
 * */
+void * keyboard_loop(void * arg);
 #endif
