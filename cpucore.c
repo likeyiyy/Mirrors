@@ -32,27 +32,31 @@ cpucore_t * get_cpu()
     return cpu;
 
 }
-#define PAGE_PRESENT(page)  (page & 0x1) 
 static inline uint32_t va_to_pa(cpucore_t * cpu,uint32_t va)
 {
     
-    if(cpu->spr[0] & PROTECTED_MODE)
+    if(cpu->spr[CURRENT_STATE] & PROTECTED_MODE)
     {
-        uint32_t page_direct = cpu->spr[3] + PAGE_DIRECT(va);
+        uint32_t page_direct = cpu->spr[PDTR] + PAGE_DIRECT(va) << PAGE_ALIGN;
         uint32_t page_table;
         read_memory_32(cpu->memory,page_direct,&page_table);        
         if(!PAGE_PRESENT(page_table))
         {
             /* 缺页异常 */
-            
+            I_SET(cpu);
+            cpu->spr[PAGE_FALUT_A] = page_direct;
+            cpu->interrupt_vector = I_PAGE_FAULT;
             return 0;
         }
-        uint32_t page_t_shif = page_table + PAGE_TABLE(va);
+        uint32_t page_t_shif = page_table + PAGE_TABLE(va) << PAGE_ALIGN;
         uint32_t page_a;
         read_memory_32(cpu->memory,page_t_shif,&page_a);
         if(!PAGE_PRESENT(page_a))
         {
             /* 缺页异常 */
+            I_SET(cpu);
+            cpu->spr[PAGE_FALUT_A] = page_table;
+            cpu->interrupt_vector  = I_PAGE_FAULT;
             return 0;
         }
         return page_a + PAGE_P_SHIFT(va);
@@ -101,7 +105,6 @@ void * cpu_main_loop(void * arg)
         {
             I_CLEAR(tcpu);
             c = read_keyboard(tcpu);
-
             wait_screen_free(tcpu);
             write_memory_8(tcpu->memory,SCREEN_MMAP_ADDR+i,c);
             i++;
