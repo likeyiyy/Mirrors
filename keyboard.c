@@ -80,7 +80,7 @@ void * keyboard_loop(void * arg)
                 key->write_pos_reg = 0;
             }
             write_memory_32(key->memory,key->mmio_start,key->write_pos_reg);
-            key->cpu->interrupt_flag = 1;
+            I_SET(key->cpu);
             key->cpu->interrupt_vector = KEY_INTERRUPT_VECTOR;
         }
         else
