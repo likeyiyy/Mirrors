@@ -4,76 +4,102 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-BUFFER_SIZE	includes.h	15;"	d
+ADD	cpucore.h	11;"	d
+ADDI	cpucore.h	12;"	d
+AND	cpucore.h	18;"	d
+ANDI	cpucore.h	22;"	d
 CC	Makefile	/^CC = gcc$/;"	m
 CFLAGS	Makefile	/^CFLAGS = -std=gnu99 -g$/;"	m
-CPUCORE_H	cpucore.h	8;"	d
-EXECS	Makefile	/^EXECS = memory_test test_key$/;"	m
-EXIT_IF_ADDR_BIGGER	memory.c	39;"	d	file:
-KEY_INTERRUPT_VECTOR	includes.h	11;"	d
-KEY_MMAP_ADDR	includes.h	14;"	d
-KEY_MMIO_ADDR	includes.h	13;"	d
-LDFLAGS	Makefile	/^LDFLAGS = -lpthread$/;"	m
-L_INCLUDES_H	includes.h	9;"	d
-L_KEYBOARD_H	keyboard.h	9;"	d
+CPUID	cpucore.h	/^    uint32_t  CPUID;$/;"	m	struct:_cpu
+DISPLAY_H	display.h	9;"	d
+DIV	cpucore.h	15;"	d
+EQUAL	cpucore.h	39;"	d
+EXECS	Makefile	/^EXECS = mirriros$/;"	m
+EXIT_IF_ADDR_BIGGER	memory.c	32;"	d	file:
+GREAT	cpucore.h	32;"	d
+GREATE	cpucore.h	33;"	d
+GREATEU	cpucore.h	37;"	d
+GREATU	cpucore.h	36;"	d
+HALT	cpucore.h	47;"	d
+JMP	cpucore.h	41;"	d
+LDFLAGS	Makefile	/^LDFLAGS = -lpthread -lncurses$/;"	m
+LESS	cpucore.h	31;"	d
+LESSE	cpucore.h	34;"	d
+LESSEU	cpucore.h	38;"	d
+LESSU	cpucore.h	35;"	d
+LUI	cpucore.h	46;"	d
+LWORD	cpucore.h	44;"	d
 L_MEMORY_H	memory.h	9;"	d
-L_SCREEN_H	screen.h	9;"	d
 MB_SIZE	memory.h	11;"	d
-MEMORY_SIZE	includes.h	29;"	d
-MMIO_END	includes.h	24;"	d
-MMIO_START	includes.h	23;"	d
-OBJS	Makefile	/^OBJS = memory.o cpucore.o keyboard.o$/;"	m
-SCREEN_BUFFER_SIZE	includes.h	21;"	d
-SCREEN_HIGH	includes.h	18;"	d
-SCREEN_MMAP_ADDR	includes.h	20;"	d
-SCREEN_MMIO_ADDR	includes.h	19;"	d
-SCREEN_WIDTH	includes.h	17;"	d
-_cpucore	cpucore.h	/^typedef struct _cpucore$/;"	s
-_keyboard	keyboard.h	/^typedef struct _keyboard$/;"	s
+MEMORY_CONSOLE_HIGH	display.c	17;"	d	file:
+MEMORY_CONSOLE_STARTX	display.c	19;"	d	file:
+MEMORY_CONSOLE_STARTY	display.c	20;"	d	file:
+MEMORY_CONSOLE_WIDTH	display.c	18;"	d	file:
+MOD	cpucore.h	16;"	d
+MOV	cpucore.h	43;"	d
+MUL	cpucore.h	14;"	d
+NOT	cpucore.h	20;"	d
+OBJS	Makefile	/^OBJS = memory.o cpucore.o display.o $/;"	m
+OR	cpucore.h	19;"	d
+ORI	cpucore.h	23;"	d
+PC	cpucore.h	/^    uint32_t  PC;$/;"	m	struct:_cpu
+PWD	cpucore.h	/^    uint32_t  PWD;$/;"	m	struct:_cpu
+PWD_DIVZERO	cpucore.h	53;"	d
+PWD_INVINST	cpucore.h	55;"	d
+PWD_MODZERO	cpucore.h	54;"	d
+RD	cpucore.h	50;"	d
+REG_CONSOLE_HIGH	display.c	22;"	d	file:
+REG_CONSOLE_STARTX	display.c	24;"	d	file:
+REG_CONSOLE_STARTY	display.c	25;"	d	file:
+REG_CONSOLE_WIDTH	display.c	23;"	d	file:
+RS	cpucore.h	51;"	d
+RT	cpucore.h	52;"	d
+SAL	cpucore.h	28;"	d
+SAR	cpucore.h	29;"	d
+SLL	cpucore.h	26;"	d
+SLR	cpucore.h	27;"	d
+SUB	cpucore.h	13;"	d
+SWORD	cpucore.h	45;"	d
+UEQUAL	cpucore.h	40;"	d
+USER_CONSOLE_HIGH	display.c	12;"	d	file:
+USER_CONSOLE_STARTX	display.c	14;"	d	file:
+USER_CONSOLE_STARTY	display.c	15;"	d	file:
+USER_CONSOLE_WIDTH	display.c	13;"	d	file:
+WORKER_SET_SIZE	display.c	10;"	d	file:
+XOR	cpucore.h	21;"	d
+XORI	cpucore.h	24;"	d
+_CPUCORE_H	cpucore.h	9;"	d
+_INCLUDES_H	includes.h	9;"	d
+_cpu	cpucore.h	/^typedef struct _cpu$/;"	s
 _memory	memory.h	/^typedef struct _memory$/;"	s
-_screen	screen.h	/^typedef struct _screen$/;"	s
-address_register	cpucore.h	/^    uint32_t address_register;$/;"	m	struct:_cpucore
-buffer	screen.h	/^    uint32_t buffer;$/;"	m	struct:_screen
-buffer_size	keyboard.h	/^    uint32_t  buffer_size;$/;"	m	struct:_keyboard
-cpu	keyboard.h	/^    cpucore_t * cpu;$/;"	m	struct:_keyboard
 cpu_main_loop	cpucore.c	/^void * cpu_main_loop(void * arg)$/;"	f
-cpucore_t	cpucore.h	/^}cpucore_t;$/;"	t	typeref:struct:_cpucore
-data_register	cpucore.h	/^    uint32_t data_register;$/;"	m	struct:_cpucore
-exit_if_ptr_is_null	includes.h	/^static inline void exit_if_ptr_is_null(void * ptr,char * str)$/;"	f
-get_cpu	cpucore.c	/^cpucore_t * get_cpu()$/;"	f
-get_keyboard	keyboard.c	/^keyboard_t * get_keyboard(void)$/;"	f
-get_memory	memory.c	/^memory_t * get_memory(void)$/;"	f
-id	keyboard.h	/^    pthread_t id;$/;"	m	struct:_keyboard
-init_cpu	cpucore.c	/^cpucore_t * init_cpu()$/;"	f
-init_keyboard	keyboard.c	/^keyboard_t * init_keyboard(void)$/;"	f
+cpu_t	cpucore.h	/^}cpu_t;$/;"	t	typeref:struct:_cpu
+exectued	cpucore.c	/^static void exectued(cpu_t * cpu, uint32_t in)$/;"	f	file:
+exit_if_ptr_is_null	memory.c	/^void exit_if_ptr_is_null(void * ptr,const char * message) $/;"	f
+getfetch	cpucore.c	/^static uint32_t getfetch(cpu_t * cpu)$/;"	f	file:
+height	display.c	/^    int height;$/;"	m	struct:__anon1	file:
+init_cpu	cpucore.c	/^cpu_t * init_cpu(uint32_t cpuid,uint32_t pc,memory_t * memory)$/;"	f
 init_memory	memory.c	/^memory_t * init_memory(uint32_t size)$/;"	f
-init_screen	screen.c	/^screen_t * init_screen(void)$/;"	f
-interrupt_flag	cpucore.h	/^    int      interrupt_flag;$/;"	m	struct:_cpucore
-interrupt_vector	cpucore.h	/^    uint32_t interrupt_vector;$/;"	m	struct:_cpucore
-kbhit	keyboard.c	/^static int kbhit(void)$/;"	f	file:
-keyboard_loop	keyboard.c	/^void * keyboard_loop(void * arg)$/;"	f
-keyboard_t	keyboard.h	/^}keyboard_t;$/;"	t	typeref:struct:_keyboard
-m_flag	screen.h	/^    uint32_t m_flag;$/;"	m	struct:_screen
-main	memory_test.c	/^int main(int argc, char ** argv)$/;"	f
-main	test_key.c	/^int main(int argc,char ** argv)$/;"	f
-memory	cpucore.h	/^    memory_t * memory;$/;"	m	struct:_cpucore
-memory	keyboard.h	/^    memory_t  * memory;$/;"	m	struct:_keyboard
+main	mirriros.c	/^int main(int argc,char ** argv)$/;"	f
+memory	cpucore.h	/^    memory_t  * memory;$/;"	m	struct:_cpu
 memory	memory.h	/^    uint8_t * memory;$/;"	m	struct:_memory
 memory_t	memory.h	/^}memory_t;$/;"	t	typeref:struct:_memory
-mmap_start	keyboard.h	/^    uint32_t  mmap_start;$/;"	m	struct:_keyboard
-mmio_start	keyboard.h	/^    uint32_t  mmio_start;$/;"	m	struct:_keyboard
-read_keyboard	cpucore.c	/^static inline uint8_t read_keyboard(cpucore_t * tcpu)$/;"	f	file:
-read_memory_16	memory.c	/^void read_memory_16(memory_t * m, uint32_t addr,uint16_t * value)$/;"	f
-read_memory_32	memory.c	/^void read_memory_32(memory_t * m, uint32_t addr,uint32_t  * value)$/;"	f
-read_memory_8	memory.c	/^void read_memory_8(memory_t * m,uint32_t addr,uint8_t * value)$/;"	f
-read_pos_reg	keyboard.h	/^    uint32_t  read_pos_reg;$/;"	m	struct:_keyboard
-screen	screen.c	/^screen_t * screen;$/;"	v
-screen_main_loop	screen.c	/^void * screen_main_loop(void * arg)$/;"	f
-screen_mmap_start	screen.h	/^    uint32_t screen_mmap_start;$/;"	m	struct:_screen
-screen_mmio_start	screen.h	/^    uint32_t screen_mmio_start;$/;"	m	struct:_screen
-screen_t	screen.h	/^}screen_t;$/;"	t	typeref:struct:_screen
+print_cpu	cpucore.c	/^void print_cpu(cpu_t * cpu)$/;"	f
+read_memory_16	memory.c	/^uint16_t read_memory_16(memory_t * m, uint32_t addr)$/;"	f
+read_memory_32	memory.c	/^uint32_t read_memory_32(memory_t * m, uint32_t addr)$/;"	f
+read_memory_8	memory.c	/^uint8_t read_memory_8(memory_t * m, uint32_t addr)$/;"	f
+reg	cpucore.h	/^    uint32_t  reg[32];$/;"	m	struct:_cpu
+screen_init	display.c	/^static void screen_init()$/;"	f	file:
+signedimm	cpucore.c	/^static inline int32_t signedimm(uint32_t instruction)$/;"	f	file:
 size	memory.h	/^    uint32_t size;$/;"	m	struct:_memory
+startx	display.c	/^    int startx;$/;"	m	struct:__anon1	file:
+starty	display.c	/^    int starty;$/;"	m	struct:__anon1	file:
+sys_display	display.c	/^void sys_display(cpu_t * cpu)$/;"	f
+width	display.c	/^    int width;$/;"	m	struct:__anon1	file:
+win	display.c	/^    WINDOW * win;$/;"	m	struct:__anon1	file:
+window	display.c	/^static window_t window[WORKER_SET_SIZE];$/;"	v	file:
+window_t	display.c	/^}window_t;$/;"	t	typeref:struct:__anon1	file:
 write_memory_16	memory.c	/^void write_memory_16(memory_t * m, uint32_t addr,uint16_t  value)$/;"	f
 write_memory_32	memory.c	/^void write_memory_32(memory_t * m, uint32_t addr,uint32_t  value)$/;"	f
 write_memory_8	memory.c	/^void write_memory_8(memory_t * m, uint32_t addr,uint8_t  value)$/;"	f
-write_pos_reg	keyboard.h	/^    uint32_t  write_pos_reg;$/;"	m	struct:_keyboard
+zeroeximm	cpucore.c	/^static inline uint32_t zeroeximm(uint32_t instruction)$/;"	f	file:

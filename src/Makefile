@@ -2,20 +2,17 @@
 
 CC = gcc
 CFLAGS = -std=gnu99 -g
-LDFLAGS = -lpthread
+LDFLAGS = -lpthread -lncurses
 
 .PHONY: all clean
 
-OBJS = memory.o cpucore.o keyboard.o screen.o
+OBJS = memory.o cpucore.o display.o 
 
-EXECS = memory_test test_key
+EXECS = mirriros
 
 all:$(EXECS)
 
-test_key:test_key.c $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
-
-memory_test:memory_test.c $(OBJS)
+mirriros:mirriros.c $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 %.o:%.c
