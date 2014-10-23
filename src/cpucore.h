@@ -35,7 +35,6 @@
 typedef enum inter_verctor
 {
     I_DIV_ZERO = 0,
-
     I_PAGE_FAULT = 3,
 };
 
