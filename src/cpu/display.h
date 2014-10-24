@@ -13,5 +13,18 @@
 * Author:  likeyi
 * Date:    2014年6月10日13:55:59
 * */
-void sys_display(cpu_t * cpu);
+typedef struct 
+{
+    int height;
+    int width;
+    int startx;
+    int starty;
+    WINDOW * win;
+    cpu_t * cpu;
+    pthread_mutex_t * lock;
+}window_t;
+window_t * init_screen(cpu_t * cpu,pthread_mutex_t * lock);
+void * mem_console_main_loop(void * arg);
+void * reg_console_main_loop(void * arg);
+void * user_console_main_loop(void * arg);
 #endif

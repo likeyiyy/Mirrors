@@ -59,6 +59,7 @@ typedef struct _cpu
 {
     uint32_t  CPUID;
     uint32_t  PC;
+    uint32_t  iPC;
     uint32_t  PWD;
     uint32_t  reg[32];
     memory_t  * memory;

@@ -11,9 +11,15 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <pthread.h>
+#include <ncurses.h>
+#include <unistd.h>
+#include <errno.h>
 
 #include "memory.h"
 #include "cpucore.h"
 #include "display.h"
+
+extern int gsleep;
 
 #endif

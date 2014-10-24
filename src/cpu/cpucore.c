@@ -36,8 +36,9 @@ static inline uint32_t zeroeximm(uint32_t instruction)
 }
 static uint32_t getfetch(cpu_t * cpu)
 {
+    cpu->PC = cpu->iPC;
     uint32_t instruction = read_memory_32(cpu->memory,cpu->PC);
-    cpu->PC += 4;
+    cpu->iPC += 4;
     return instruction;
 }
 static void exectued(cpu_t * cpu, uint32_t in)
@@ -121,87 +122,87 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		if ((signed)RD(in) < (signed)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case GREAT:
 		if ((signed)RD(in) > (signed)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
     case LESSE:
 		if ((signed)RD(in) <= (signed)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case GREATE:
 		if ((signed)RD(in) >= (signed)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case LESSU:
 		if ((unsigned)RD(in) < (unsigned)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2 ;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2 ;     ///然后相对PC偏移
 		}
 		break;
 	case GREATU:
 		if ((unsigned)RD(in) > (unsigned)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
     case LESSEU:
 		if ((unsigned)RD(in) <= (unsigned)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case GREATEU:
 		if ((unsigned)RD(in) >= (unsigned)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case EQUAL:
 		if ((unsigned)RD(in) == (unsigned)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case UEQUAL:
 		if ((unsigned)RD(in) != (unsigned)RS(in))
 		{
 			int tmp = signedimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case JMP:
         {
             int tmp = signedjmpimm(in);
-			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp << 2;     ///然后相对PC偏移
+			cpu->iPC -= 4;           ///PC值首先减四。
+			cpu->iPC += tmp << 2;     ///然后相对PC偏移
         }
 		break;
     /* 存储指令 */
@@ -230,6 +231,7 @@ void * cpu_main_loop(void * arg)
     while(1)
     {
         exectued(cpu,getfetch(cpu));
+        usleep(gsleep);
     }
 }
 cpu_t * init_cpu(uint32_t cpuid,uint32_t pc,memory_t * memory)
@@ -242,6 +244,7 @@ cpu_t * init_cpu(uint32_t cpuid,uint32_t pc,memory_t * memory)
     }
     cpu->CPUID = cpuid;
     cpu->PC = pc;
+    cpu->iPC = pc;
     cpu->memory = memory;
     return cpu;
 }
