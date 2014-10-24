@@ -45,7 +45,7 @@
 /* 5. 存储指令  4 */
 #define MOV		28
 #define LWORD	29
-#define SWORD	31
+#define SWORD	30
 #define LUI		31
 
 

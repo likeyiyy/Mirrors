@@ -7,6 +7,11 @@
 
 #include "includes.h"
 
+typedef struct
+{
+    char * name;
+    int line;
+}var_t;
 static inline int line_has_label(const char * p)
 {
     while(p[0] != '\0')
@@ -99,7 +104,7 @@ static int verify_opcode(char * opcode,int lines)
     printf("[ERROR 3]:invalid instruction opcode line: %d\n",lines);
     exit(-3);
 }
-static inline int get_reg_index(char * reg)
+static inline int get_reg_index(char * reg,int line)
 {
     for(int i = 0; i < 32; i++)
     {
@@ -108,7 +113,7 @@ static inline int get_reg_index(char * reg)
             return i;
         }
     }
-    printf("[ERROR 4]:invalid reg num\n");
+    printf("[ERROR 4]:invalid reg num line: %d\n",line);
     exit(-4);
 }
 static inline char * skip_op_name(const char * p)
@@ -164,11 +169,12 @@ static int masm_main_loop(char * obj_file,char * src_file)
     hash_table * label_hash = hash_create(512);
 
     char op_name[128];
+    char label[128];
     char rd[6];
     char rs[6];
     char rt[6];
     char imm[20];
-    uint32_t rd_num,rs_num,rt_num;
+    int32_t rd_num,rs_num,rt_num,imm_num;
 
     if((src_fp = fopen(src_file,"r")) == NULL)
     {
@@ -179,8 +185,10 @@ static int masm_main_loop(char * obj_file,char * src_file)
         printf("Can not open %s:%s\n",obj_file,strerror(errno));
     }
     int total_lines = get_file_lines(src_fp);
+    uint32_t * instruction = calloc(1,total_lines * sizeof(uint32_t));
+    var_t    * var = calloc(1,total_lines * sizeof(var_t));
+    int     var_count = 0;
     fseek(src_fp,0L,SEEK_SET);
-    uint32_t * instruction = malloc(total_lines * sizeof(uint32_t));
     while(1)
     {
         fgets(buf,BUFSIZ,src_fp);
@@ -203,7 +211,6 @@ static int masm_main_loop(char * obj_file,char * src_file)
         {
             continue;
         }
-        //printf("%s",p);
         q = get_first_token(p);
         strncpy(op_name, p , q-p);
         op_name[q-p] = '\0';
@@ -220,7 +227,7 @@ static int masm_main_loop(char * obj_file,char * src_file)
             q = get_opcode_token(p);
             strncpy(op_name, p , q-p);
             op_name[q-p] = '\0';
-            printf("%s",op_name);
+            //printf("%s",op_name);
         }
 
         /* p now a opcode start q-p is opecode */
@@ -232,7 +239,6 @@ static int masm_main_loop(char * obj_file,char * src_file)
         switch(op_index)
         {
 #if 1
-            
         	case ADD:
         	case SUB:
         	case MUL:
@@ -260,9 +266,9 @@ static int masm_main_loop(char * obj_file,char * src_file)
             q = get_reg_token(p);
             strncpy(rt, p , q-p);
             rt[q-p] = '\0';
-            rd_num = get_reg_index(rd);
-            rs_num = get_reg_index(rs);
-            rt_num = get_reg_index(rt);
+            rd_num = get_reg_index(rd,lines);
+            rs_num = get_reg_index(rs,lines);
+            rt_num = get_reg_index(rt,lines);
             instruction[counter] = (op_index << 26) | (rd_num << 21) | (rs_num << 16)| (rt_num << 11);
             break;
             ///C语言中的左移就是逻辑左移，而右移，
@@ -273,6 +279,37 @@ static int masm_main_loop(char * obj_file,char * src_file)
         	case SLR:
             case SAL:
         	case SAR:
+        	case ADDI:
+        	case ANDI:  ///这里的立即数是0扩展的。
+        	case ORI:
+        	case XORI:
+        	case LUI: ///哦，载入高16位数啊，靠，那么低位怎么载入呢？用ori
+            q = get_reg_token(p);
+            strncpy(rd, p , q-p);
+            rd[q-p] = '\0';
+            q = skip_reg_wthie(q);
+            p = q;
+
+            q = get_reg_token(p);
+            strncpy(rs, p , q-p);
+            rs[q-p] = '\0';
+            q = skip_reg_wthie(q);
+            p = q;
+
+            q = get_reg_token(p);
+            strncpy(imm, p , q-p);
+            imm[q-p] = '\0';
+            rd_num = get_reg_index(rd,lines);
+            rs_num = get_reg_index(rs,lines);
+            imm_num = atoi(imm);
+            if(imm_num > 32767 || imm_num < -32768)
+            {
+                printf("________\n");
+                printf("[ERROR 6] line: %d imm num is too lager or too smaller\n",lines);
+            }
+            instruction[counter] = (op_index << 26) | (rd_num << 21) | (rs_num << 16)| (imm_num & 0x0000ffff);
+
+            break;
         	case LESS:
         	case GREAT:
             case LESSE:
@@ -283,15 +320,53 @@ static int masm_main_loop(char * obj_file,char * src_file)
         	case GREATEU:
         	case EQUAL:
         	case UEQUAL:
-        	case ADDI:
-        	case ANDI:  ///这里的立即数是0扩展的。
-        	case ORI:
-        	case XORI:
-        	case LUI: ///哦，载入高16位数啊，靠，那么低位怎么载入呢？用ori
-        		break;
+            q = get_reg_token(p);
+            strncpy(rd, p , q-p);
+            rd[q-p] = '\0';
+            q = skip_reg_wthie(q);
+            p = q;
+
+            q = get_reg_token(p);
+            strncpy(rs, p , q-p);
+            rs[q-p] = '\0';
+            q = skip_reg_wthie(q);
+            p = q;
+
+            q = get_reg_token(p);
+            strncpy(label, p , q-p);
+            label[q-p] = '\0';
+            rd_num = get_reg_index(rd,lines);
+            rs_num = get_reg_index(rs,lines);
+            var[var_count].name = malloc(strlen(label) + 1);
+            strcpy(var[var_count].name, label);
+            var[var_count].line = counter;
+            var_count++;
+            instruction[counter] = (op_index << 26) | (rd_num << 21) | (rs_num << 16) | 0x0;
+        	break;
         	case JMP:
+            q = get_reg_token(p);
+            strncpy(label, p , q-p);
+            label[q-p] = '\0';
+            var[var_count].name = malloc(strlen(label) + 1);
+            strcpy(var[var_count].name, label);
+            var[var_count].line = counter;
+            var_count++;
+            instruction[counter] = (op_index << 26);
+            break;
             /* 存储指令 */
         	case MOV:
+            q = get_reg_token(p);
+            strncpy(rd, p , q-p);
+            rd[q-p] = '\0';
+            q = skip_reg_wthie(q);
+            p = q;
+
+            q = get_reg_token(p);
+            strncpy(rs, p , q-p);
+            rs[q-p] = '\0';
+            rd_num = get_reg_index(rd,lines);
+            rs_num = get_reg_index(rs,lines);
+            instruction[counter] = (op_index << 26) | (rd_num << 21) | (rs_num << 16) | 0x0;
                 break;
             default:
                 break;
@@ -299,6 +374,39 @@ static int masm_main_loop(char * obj_file,char * src_file)
         }
         counter++;
     }
+
+    /* 第二趟汇编 */
+    struct blist * head;
+    for(int i = 0; i < var_count; i++)
+    {
+        if((head = hash_lookup_item(label_hash,str2hash(var[i].name),&var[i])) != NULL)
+        {
+            label_t * node = head->item;
+            int imm_2 = node->line - var[i].line;
+            if((instruction[var[i].line] >> 26) == JMP)
+            {
+                if(imm_2 > 33554431 || imm_2 < -33554432)
+                {
+                    printf("[ERROR 7] line: %d imm num is too lager or too smaller\n",lines);
+                }
+                instruction[var[i].line] |= imm_2 & 0x03ffffff;
+            }
+            else
+            {
+                if(imm_2 > 32767 || imm_2 < -32768)
+                {
+                    printf("[ERROR 6] line: %d imm num is too lager or too smaller\n",lines);
+                }
+                instruction[var[i].line] |= imm_2 & 0x0000ffff;
+            }
+        }
+        else
+        {
+            printf("[ERROR 5]: line %d : %s not defined\n",var[i].line,var[i].name);
+        }
+
+    }
+    fwrite(instruction,sizeof(uint32_t),counter,obj_fp);
     fclose(src_fp);
     fclose(obj_fp);
 }

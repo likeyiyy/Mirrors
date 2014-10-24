@@ -18,6 +18,18 @@ static inline int32_t signedimm(uint32_t instruction)
         return (int)imm&0x0000ffff;
     }
 }
+static inline int32_t signedjmpimm(uint32_t instruction)
+{
+    unsigned short imm = instruction & 0x03fffffff;
+    if(imm&0x2000000)
+    {
+        return (int)imm|0xff000000;
+    }
+    else
+    {
+        return (int)imm&0x03ffffff;
+    }
+}
 static inline uint32_t zeroeximm(uint32_t instruction)
 {
     return instruction & 0x0000ffff;
@@ -110,7 +122,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case GREAT:
@@ -118,7 +130,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
     case LESSE:
@@ -126,7 +138,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case GREATE:
@@ -134,7 +146,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case LESSU:
@@ -142,7 +154,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp ;     ///然后相对PC偏移
+			cpu->PC += tmp << 2 ;     ///然后相对PC偏移
 		}
 		break;
 	case GREATU:
@@ -150,7 +162,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
     case LESSEU:
@@ -158,7 +170,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case GREATEU:
@@ -166,7 +178,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case EQUAL:
@@ -174,7 +186,7 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case UEQUAL:
@@ -182,11 +194,15 @@ static void exectued(cpu_t * cpu, uint32_t in)
 		{
 			int tmp = signedimm(in);
 			cpu->PC -= 4;           ///PC值首先减四。
-			cpu->PC += tmp;     ///然后相对PC偏移
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
 		}
 		break;
 	case JMP:
-		cpu->PC = (uint32_t)RD(in);
+        {
+            int tmp = signedjmpimm(in);
+			cpu->PC -= 4;           ///PC值首先减四。
+			cpu->PC += tmp << 2;     ///然后相对PC偏移
+        }
 		break;
     /* 存储指令 */
 	case MOV:

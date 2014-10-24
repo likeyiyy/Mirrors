@@ -5,8 +5,7 @@
         addi r0,r0,100
         jmp sum
 
-sum  :    
-        xor        r1,r1,r1
+sum  :  xor r1,r1,r1
         xor r2,r2,r2
 loop:   addi r1,r1,1
         add r2,r2,r1

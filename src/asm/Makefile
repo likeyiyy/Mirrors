@@ -8,11 +8,14 @@ LDFLAGS = -lpthread -lncurses
 
 OBJS = hash.o 
 
-EXECS = masm
+EXECS = masm objdump
 
 all:$(EXECS)
 
 masm:masm.c $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+
+objdump:objdump.c $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 %.o:%.c
