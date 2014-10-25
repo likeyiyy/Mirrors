@@ -1,18 +1,18 @@
 
 
 CC = gcc
-CFLAGS = -std=gnu99 -g
+CFLAGS = -std=gnu99 -g -O0
 LDFLAGS = -lpthread -lncurses
 
 .PHONY: all clean
 
 OBJS = memory.o cpucore.o display.o 
 
-EXECS = mirriros
+EXECS = mirrors
 
 all:$(EXECS)
 
-mirriros:mirriros.c $(OBJS)
+mirrors:mirrors.c $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 %.o:%.c

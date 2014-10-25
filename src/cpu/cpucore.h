@@ -55,6 +55,9 @@
 #define PWD_DIVZERO (1)
 #define PWD_MODZERO (1 << 1)
 #define PWD_INVINST (1 << 2)
+#define MAXSIZE 20000
+#define CODE_LENGTH 8192
+#define FLAG_ADDRES 0x8000
 typedef struct _cpu
 {
     uint32_t  CPUID;
@@ -64,7 +67,20 @@ typedef struct _cpu
     uint32_t  reg[32];
     memory_t  * memory;
 }cpu_t;
+typedef struct 
+{
+    uint32_t * codes;
+    int length;
+}code_t;
 
+typedef struct _mirror
+{
+    cpu_t * imaginary;
+    cpu_t * real;
+    code_t * save_code;
+    uint64_t failure_test;
+    uint64_t success_test;
+}mirror_t;
 cpu_t * init_cpu(uint32_t cpuid,uint32_t pc,memory_t * memory);
 void * cpu_main_loop(void * arg);
 #endif

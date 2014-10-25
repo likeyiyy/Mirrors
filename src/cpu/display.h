@@ -20,10 +20,10 @@ typedef struct
     int startx;
     int starty;
     WINDOW * win;
-    cpu_t * cpu;
+    mirror_t * mirror;
     pthread_mutex_t * lock;
 }window_t;
-window_t * init_screen(cpu_t * cpu,pthread_mutex_t * lock);
+window_t * init_screen(mirror_t * mirror,pthread_mutex_t * lock);
 void * mem_console_main_loop(void * arg);
 void * reg_console_main_loop(void * arg);
 void * user_console_main_loop(void * arg);

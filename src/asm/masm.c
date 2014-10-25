@@ -407,6 +407,8 @@ static int masm_main_loop(char * obj_file,char * src_file)
 
     }
     fwrite(instruction,sizeof(uint32_t),counter,obj_fp);
+    sprintf(buf,"chmod 744 %s",obj_file);
+    system(buf);
     fclose(src_fp);
     fclose(obj_fp);
 }

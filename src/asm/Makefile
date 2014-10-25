@@ -1,7 +1,7 @@
 
 
 CC = gcc
-CFLAGS = -std=gnu99 -g
+CFLAGS = -std=gnu99 -O3
 LDFLAGS = -lpthread -lncurses
 
 .PHONY: all clean

@@ -2,7 +2,8 @@
 ;date 2014年10月24日11:37:46
 
         xor r0,r0,r0
-        addi r0,r0,1000
+        addi r0,r0,500
+        mul  r0,r0,r0
         jmp sum
 
 sum  :  xor r1,r1,r1

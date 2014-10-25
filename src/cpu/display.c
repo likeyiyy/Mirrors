@@ -134,7 +134,7 @@ char * get_deassembly(uint32_t in)
             break;
     }
 }
-window_t * init_screen(cpu_t * cpu,pthread_mutex_t * lock)
+window_t * init_screen(mirror_t * mirror,pthread_mutex_t * lock)
 {
     initscr();
     window_t * window = malloc(sizeof(window_t) * 3);
@@ -171,9 +171,9 @@ window_t * init_screen(cpu_t * cpu,pthread_mutex_t * lock)
                window[2].startx
                 );
     scrollok(window[2].win,1);
-    window[0].cpu = cpu;
-    window[1].cpu = cpu;
-    window[2].cpu = cpu;
+    window[0].mirror = mirror;
+    window[1].mirror = mirror;
+    window[2].mirror = mirror;
     window[0].lock = lock;
     window[1].lock = lock;
     window[2].lock = lock;
@@ -182,7 +182,7 @@ window_t * init_screen(cpu_t * cpu,pthread_mutex_t * lock)
 void * mem_console_main_loop(void * arg)
 {
     window_t * win = (window_t *)arg;
-    cpu_t * cpu = win->cpu;
+    cpu_t * cpu = win->mirror->real;
     int high = win->height;
     uint32_t oldpc = 0;
     uint32_t start_addr,end_addr;
@@ -222,7 +222,7 @@ void * mem_console_main_loop(void * arg)
 void * reg_console_main_loop(void * arg)
 {
     window_t * win = (window_t *)arg;
-    cpu_t * cpu = win->cpu;
+    cpu_t * cpu = win->mirror->real;
     uint32_t oldpc = 0;
     while(1)
     {
@@ -249,10 +249,22 @@ void * user_console_main_loop(void * arg)
 {
     char buf[20];
     window_t * win = (window_t *)arg;
+    mirror_t * mirror = win->mirror;
     wprintw(win->win,">");
     wrefresh(win->win);
+    uint64_t ftest,stest;
+    ftest = stest = 0;
     while(1)
     {
+        if((ftest != mirror->failure_test) || (stest != mirror->success_test))
+        {
+            ftest = mirror->failure_test;
+            stest = mirror->success_test;
+            wprintw(win->win,"Failure:%16lu,Success:%16lu\n",ftest,stest);
+            wrefresh(win->win);
+        }
+
+        #if 0
         wscanw(win->win,"%s",buf);
         if(strcmp("quit",buf) == 0)
         {
@@ -271,5 +283,6 @@ void * user_console_main_loop(void * arg)
         }
         wrefresh(win->win);
         usleep(gsleep);
+        #endif
     }
 }
